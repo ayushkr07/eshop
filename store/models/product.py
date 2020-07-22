@@ -12,3 +12,9 @@ class Product(models.Model):
     @staticmethod
     def get_all_products():
         return Product.objects.all()
+
+    @staticmethod
+    def get_all_products_by_cateogory_id(cateogory_id):
+        if cateogory_id:
+            return Product.objects.filter(cateogory=cateogory_id)
+        return Product.objects.all()

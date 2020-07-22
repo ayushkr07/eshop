@@ -2,17 +2,32 @@
 
 {% block content %}
 <div class="container container-fluid mt-3">
-  <div class="row mx-auto">
-    {% for product in products %}
-    <div class="card mx-auto my-2" style="width: 18rem;">
-      <img src={{product.image.url}} class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">{{product.name}}</h5>
-        <p class="card-text">{{product.price}}</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+
+  <div class="row my-2">
+    <div class="col-lg-2 mx-auto">
+      <div class="list-group">
+        <a href="/" class="list-group-item list-group-item-action">All Product</a>
+        {% for cateogory in cateogories %}
+        <a href="/?cateogory={{cateogory.id}}" class="list-group-item list-group-item-action">{{cateogory.name}}</a>
+        {% endfor %}
+      </div>
+
+    </div>
+    <div id='product' class="col-lg-10 mx-auto">
+      <div class="row mx-auto">
+        {% for product in products %}
+        <div class="card mx-auto" style="width: 18rem;">
+          <img src={{product.image.url}} class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">{{product.name}}</h5>
+            <p class="card-text">{{product.price}}</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+          </div>
+        </div>
+        {% endfor %}
       </div>
     </div>
-    {% endfor %}
   </div>
+  
 </div>
 {% endblock %}
