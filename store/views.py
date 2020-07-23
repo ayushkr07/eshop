@@ -1,7 +1,9 @@
 from django.shortcuts import render,HttpResponse,redirect
 from .models.product import Product
+from django.contrib.auth.hashers import make_password,check_password
 from .models.cateogory import Cateogory
 from .models.customer import Customer
+
 
 def index(request):
     cateogories=Cateogory.get_all_cateogories()
@@ -62,6 +64,7 @@ def signup(request):
             error_message = 'Email already exists'
 
         if not error_message:
+            customer.password=make_password(customer.password)
             customer.save()
             return redirect('index')
         else:
