@@ -17,6 +17,33 @@ def index(request):
     data['cateogories']=cateogories
     return render(request,'index.html',data)
 
+def validateCustomer(customer):
+    error_message = None
+    if not customer.first_name:
+        error_message = 'First name required'
+    elif len(customer.first_name) < 4:
+        error_message = 'First name must have atleast four characters'
+    elif not customer.last_name:
+        error_message = 'Last name required'
+    elif len(customer.last_name) < 4:
+        error_message = 'Last name must have atleast four characters'
+    elif not customer.phone:
+        error_message = 'Phone Number required'
+    elif len(customer.phone) < 10:
+        error_message = 'Phone Number must have atleast ten characters'
+    elif not customer.password:
+        error_message = 'Password required'
+    elif len(customer.password) < 6:
+        error_message = 'Password must have atleast six characters'
+    elif not customer.email:
+        error_message = 'Email required'
+    elif len(customer.email) < 5:
+        error_message = 'Email must have atleast five characters'
+    elif customer.isExists():
+        error_message = 'Email already exists'
+
+    return error_message
+
 def signup(request):
     if request.method == 'GET':
         return render(request,'signup.html')
@@ -39,30 +66,7 @@ def signup(request):
                             email=email,
                             password=password)
         # Validation
-        error_message = None
-        if not f_name:
-            error_message = 'First name required'
-        elif len(f_name) < 4:
-            error_message = 'First name must have atleast four characters'
-        elif not l_name:
-            error_message = 'Last name required'
-        elif len(l_name) < 4:
-            error_message = 'Last name must have atleast four characters'
-        elif not phone:
-            error_message = 'Phone Number required'
-        elif len(phone)<10:
-            error_message = 'Phone Number must have atleast ten characters'
-        elif not password:
-            error_message = 'Password required'
-        elif len(password)<6:
-            error_message = 'Password must have atleast six characters'
-        elif not email:
-            error_message = 'Email required'
-        elif len(email)<5:
-            error_message = 'Email must have atleast five characters'
-        elif customer.isExists():
-            error_message = 'Email already exists'
-
+        error_message = validateCustomer(customer)
         if not error_message:
             customer.password=make_password(customer.password)
             customer.save()
