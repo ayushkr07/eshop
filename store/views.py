@@ -1,6 +1,8 @@
 from django.shortcuts import render,HttpResponse,redirect
-from .models.product import Product
 from django.contrib.auth.hashers import make_password,check_password
+from django.views import View
+
+from .models.product import Product
 from .models.cateogory import Cateogory
 from .models.customer import Customer
 
@@ -78,13 +80,14 @@ def signup(request):
             }
             return render(request,'signup.html',data)
 
-def login(request):
-    if request.method == 'GET':
-        return render(request,'login.html')
-    else:
+class Login(View):
+    def get(self,request):
+        return render(request, 'login.html')
+
+    def post(self,request):
         email = request.POST.get('email')
         password = request.POST.get('password')
-        #get customer by email
+        # get customer by email
         try:
             customer = Customer.objects.get(email=email)
         except:
@@ -93,11 +96,11 @@ def login(request):
         # error_message = None
 
         if customer:
-            if check_password(password,customer.password):
+            if check_password(password, customer.password):
                 return redirect('index')
             else:
                 error_message = 'Incorrect email or password'
         else:
             error_message = 'Incorrect email or password'
 
-        return render(request,'login.html',{'error' : error_message})
+        return render(request, 'login.html', {'error': error_message})
