@@ -6,19 +6,36 @@ from .models.product import Product
 from .models.cateogory import Cateogory
 from .models.customer import Customer
 
+class Index(View):
+    def post(self,request):
+        product = request.POST.get('product')
+        cart = request.session.get('cart')
+        if cart:
+            quantity = cart.get(product)
+            if quantity:
+                cart[product] = quantity + 1
+            else:
+                cart[product] = 1
+        else:
+            cart ={}
+            cart[product] = 1
+        request.session['cart']=cart
+        print(request.session['cart'])
+        return redirect('index')
 
-def index(request):
-    cateogories = Cateogory.get_all_cateogories()
-    cateogoryID = request.GET.get('cateogory')
-    if cateogoryID:
-        products = Product.get_all_products_by_cateogory_id(cateogoryID)
-    else:
-        products = Product.get_all_products()
-    data = {}
-    data['products'] = products
-    data['cateogories'] = cateogories
-    return render(request, 'index.html', data)
+    def get(self,request):
+        cateogories = Cateogory.get_all_cateogories()
+        cateogoryID = request.GET.get('cateogory')
+        if cateogoryID:
+            products = Product.get_all_products_by_cateogory_id(cateogoryID)
+        else:
+            products = Product.get_all_products()
+        data = {}
+        data['products'] = products
+        data['cateogories'] = cateogories
 
+        print('You are ', request.session.get('email'))
+        return render(request, 'index.html', data)
 
 class Signup(View):
     def get(self, request):
@@ -100,6 +117,9 @@ class Login(View):
 
         if customer:
             if check_password(password, customer.password):
+
+                request.session['id'] = customer.id
+                request.session['email'] = customer.email
                 return redirect('index')
             else:
                 error_message = 'Incorrect email or password'
