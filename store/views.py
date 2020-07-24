@@ -44,7 +44,6 @@ class Index(View):
         data['products'] = products
         data['cateogories'] = cateogories
 
-        print('You are ', request.session.get('email'))
         return render(request, 'index.html', data)
 
 class Signup(View):
@@ -128,8 +127,7 @@ class Login(View):
         if customer:
             if check_password(password, customer.password):
 
-                request.session['id'] = customer.id
-                request.session['email'] = customer.email
+                request.session['customer'] = customer.id
                 return redirect('index')
             else:
                 error_message = 'Incorrect email or password'
@@ -137,3 +135,8 @@ class Login(View):
             error_message = 'Incorrect email or password'
 
         return render(request, 'login.html', {'error': error_message})
+
+
+def logout(request):
+    request.session.clear()
+    return redirect('login')
