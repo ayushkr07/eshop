@@ -8,6 +8,8 @@ class Product(models.Model):
     description=models.CharField(max_length=200,default='',null=True,blank=True)
     image=models.ImageField(upload_to='upload/product/')
 
+    def __str__(self):
+        return self.name
 
     @staticmethod
     def get_all_products():
