@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+{% load cart %}
+{% load custom %}
 
 {% block content %}
-{% load cart %}
 <div class="container container-fluid mt-3">
 
   <div class="row my-2">
@@ -21,7 +22,7 @@
           <img src={{product.image.url}} class="card-img-top" alt="..." style="height: 15rem;;">
           <div class="card-body">
             <h5 class="card-title">{{product.name}}</h5>
-            <p class="card-text">{{product.price}}</p>
+            <p class="card-text">{{product.price|currency}}</p>
 
             <div class="card-footer p-0 no-gutter">
               {% if product|is_in_cart:request.session.cart %}
