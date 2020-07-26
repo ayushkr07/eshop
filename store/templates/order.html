@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load cart %}
+{% load custom %}
+
+{% block content %}
+<div class="container">
+    <div class="border rounded p-4 m-4">
+        <p class="display-4">Your Orders</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>S no.</th>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Date</th>
+                    <th>Rate</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+
+                    <td>{{forloop.counter}}</td>
+                    <td><img style="height: 80px;" class="rounded-circle" src="{{order.product.image.url}}" alt=""></td>
+                    <td>{{order.product.name}}</td>
+                    <td>{{order.date}}</td>
+                    <td>{{order.price|currency}}</td>
+                    <td>{{order.quantity}}</td>
+                    <td>{{order.quantity|multiply:order.price|currency}}</td>
+                    <td>{{order.status|default:'pending'}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+        <hr>
+        <div class="m-3 p-3">
+            <a href="#" data-toggle="modal" data-target="#exampleModal" class="btn btn-outline-info border ronded col-lg-3 float-right">Order</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

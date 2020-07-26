@@ -159,13 +159,19 @@ class Checkout(View):
         print(address,phone,customer,cart,products)
 
         for product in products:
-            order = Order(product=product,
-                          customer=Customer(id=customer),
-                          quantity=cart.get(str(product.id)),
-                          price=product.price,
-                          address=address,
-                          phone=phone)
+            order = OrderView(product=product,
+                              customer=Customer(id=customer),
+                              quantity=cart.get(str(product.id)),
+                              price=product.price,
+                              address=address,
+                              phone=phone)
             order.place_order()
             request.session['cart']={}
         return redirect('cart')
+
+class OrderView(View):
+    def get(self,request):
+        customer = request.session.get('customer')
+        orders = Order.get_order_by_customer(customer)
+        return render(request,'order.html',{'orders' : orders})
 

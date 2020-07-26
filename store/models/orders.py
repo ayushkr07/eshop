@@ -13,5 +13,10 @@ class Order(models.Model):
     phone = models.CharField(max_length=50,default='',blank=True)
     date = models.DateField(default=datetime.today)
 
+
     def place_order(self):
         self.save()
+
+    @staticmethod
+    def get_order_by_customer(customer):
+        return Order.objects.filter(customer=customer)
