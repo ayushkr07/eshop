@@ -5,6 +5,7 @@ from django.views import View
 from .models.product import Product
 from .models.cateogory import Cateogory
 from .models.customer import Customer
+from .models.orders import Order
 
 class Index(View):
     def post(self,request):
@@ -147,4 +148,24 @@ class Cart(View):
         products = Product.get_products_by_ids(ids)
         # print(products)
         return render(request, 'cart.html',{'products' : products})
+
+class Checkout(View):
+    def post(self,request):
+        address = request.POST.get('address')
+        phone = request.POST.get('phone')
+        customer = request.session.get('customer')
+        cart = request.session.get('cart')
+        products = Product.get_products_by_ids(list(cart.keys()))
+        print(address,phone,customer,cart,products)
+
+        for product in products:
+            order = Order(product=product,
+                          customer=Customer(id=customer),
+                          quantity=cart.get(str(product.id)),
+                          price=product.price,
+                          address=address,
+                          phone=phone)
+            order.place_order()
+            request.session['cart']={}
+        return redirect('cart')
 
