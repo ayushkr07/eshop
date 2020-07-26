@@ -7,6 +7,7 @@ from .models.cateogory import Cateogory
 from .models.customer import Customer
 from .models.orders import Order
 
+
 class Index(View):
     def post(self,request):
         product = request.POST.get('product')
